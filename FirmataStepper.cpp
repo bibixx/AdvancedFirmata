@@ -347,27 +347,32 @@ bool FirmataStepper::update()
  */
 void FirmataStepper::updateStepPosition()
 {
+  if(this->direction==1){ this->step_number++;}
+  if(this->direction==0){ this->step_number--; }
+  if(this->step_number>7){this->step_number=0;}
+  if(this->step_number<0){this->step_number=7; }
+
   // increment or decrement the step number,
   // depending on direction:
-  if (this->direction == FirmataStepper::CW)
-  {
-    this->step_number++;
-    if (this->step_number >= this->steps_per_rev)
-    {
-      this->step_number = 0;
-    }
-  }
-  else
-  {
-    if (this->step_number <= 0)
-    {
-      this->step_number = this->steps_per_rev;
-    }
-    this->step_number--;
-  }
+  // if (this->direction == FirmataStepper::CW)
+  // {
+  //   this->step_number++;
+  //   if (this->step_number >= this->steps_per_rev)
+  //   {
+  //     this->step_number = 0;
+  //   }
+  // }
+  // else
+  // {
+  //   if (this->step_number <= 0)
+  //   {
+  //     this->step_number = this->steps_per_rev;
+  //   }
+  //   this->step_number--;
+  // }
 
   // step the motor to step number 0, 1, 2, or 3:
-  stepMotor(this->step_number % 4, this->direction);
+  stepMotor(this->step_number, this->direction);
 }
 
 /**
@@ -378,64 +383,106 @@ void FirmataStepper::updateStepPosition()
  */
 void FirmataStepper::stepMotor(byte step_num, byte direction)
 {
-  if (this->interface == FirmataStepper::DRIVER)
+  // if (this->interface == FirmataStepper::DRIVER)
+  // {
+  //   digitalWrite(dir_pin, direction);
+  //   delayMicroseconds(this->stepDelay);
+  //   digitalWrite(step_pin, LOW);
+  //   delayMicroseconds(this->stepDelay);
+  //   digitalWrite(step_pin, HIGH);
+  // }
+  // else if (this->interface == FirmataStepper::TWO_WIRE)
+  // {
+  //   switch (step_num)
+  //   {
+  //   case 0: /* 01 */
+  //     digitalWrite(motor_pin_1, LOW);
+  //     digitalWrite(motor_pin_2, HIGH);
+  //     break;
+  //   case 1: /* 11 */
+  //     digitalWrite(motor_pin_1, HIGH);
+  //     digitalWrite(motor_pin_2, HIGH);
+  //     break;
+  //   case 2: /* 10 */
+  //     digitalWrite(motor_pin_1, HIGH);
+  //     digitalWrite(motor_pin_2, LOW);
+  //     break;
+  //   case 3: /* 00 */
+  //     digitalWrite(motor_pin_1, LOW);
+  //     digitalWrite(motor_pin_2, LOW);
+  //     break;
+  //   }
+  // }
+  /*else */if (this->interface == FirmataStepper::FOUR_WIRE || true)
   {
-    digitalWrite(dir_pin, direction);
-    delayMicroseconds(this->stepDelay);
-    digitalWrite(step_pin, LOW);
-    delayMicroseconds(this->stepDelay);
-    digitalWrite(step_pin, HIGH);
-  }
-  else if (this->interface == FirmataStepper::TWO_WIRE)
-  {
-    switch (step_num)
-    {
-    case 0: /* 01 */
-      digitalWrite(motor_pin_1, LOW);
-      digitalWrite(motor_pin_2, HIGH);
-      break;
-    case 1: /* 11 */
-      digitalWrite(motor_pin_1, HIGH);
-      digitalWrite(motor_pin_2, HIGH);
-      break;
-    case 2: /* 10 */
-      digitalWrite(motor_pin_1, HIGH);
-      digitalWrite(motor_pin_2, LOW);
-      break;
-    case 3: /* 00 */
-      digitalWrite(motor_pin_1, LOW);
-      digitalWrite(motor_pin_2, LOW);
-      break;
+    if ( this->interface == FirmataStepper::FOUR_WIRE ) {
+    } else if ( this->interface == FirmataStepper::DRIVER ) {
     }
-  }
-  else if (this->interface == FirmataStepper::FOUR_WIRE)
-  {
+    int motor_pin_1 = 2;
+    int motor_pin_2 = 3;
+    int motor_pin_3 = 5;
+    int motor_pin_4 = 6;
+    // int motor_pin_1 = 8;
+    // int motor_pin_2 = 9;
+    // int motor_pin_3 = 10;
+    // int motor_pin_4 = 11;
+
     switch (step_num)
     {
-    case 0:    // 1010
-      digitalWrite(motor_pin_1, HIGH);
-      digitalWrite(motor_pin_2, LOW);
-      digitalWrite(motor_pin_3, HIGH);
-      digitalWrite(motor_pin_4, LOW);
-      break;
-    case 1:    // 0110
-      digitalWrite(motor_pin_1, LOW);
-      digitalWrite(motor_pin_2, HIGH);
-      digitalWrite(motor_pin_3, HIGH);
-      digitalWrite(motor_pin_4, LOW);
-      break;
-    case 2:    //0101
-      digitalWrite(motor_pin_1, LOW);
-      digitalWrite(motor_pin_2, HIGH);
-      digitalWrite(motor_pin_3, LOW);
-      digitalWrite(motor_pin_4, HIGH);
-      break;
-    case 3:    //1001
-      digitalWrite(motor_pin_1, HIGH);
-      digitalWrite(motor_pin_2, LOW);
-      digitalWrite(motor_pin_3, LOW);
-      digitalWrite(motor_pin_4, HIGH);
-      break;
+    case 0:
+     digitalWrite(motor_pin_1, LOW);
+     digitalWrite(motor_pin_2, LOW);
+     digitalWrite(motor_pin_3, LOW);
+     digitalWrite(motor_pin_4, HIGH);
+   break;
+   case 1:
+     digitalWrite(motor_pin_1, LOW);
+     digitalWrite(motor_pin_2, LOW);
+     digitalWrite(motor_pin_3, HIGH);
+     digitalWrite(motor_pin_4, HIGH);
+   break;
+   case 2:
+     digitalWrite(motor_pin_1, LOW);
+     digitalWrite(motor_pin_2, LOW);
+     digitalWrite(motor_pin_3, HIGH);
+     digitalWrite(motor_pin_4, LOW);
+   break;
+   case 3:
+     digitalWrite(motor_pin_1, LOW);
+     digitalWrite(motor_pin_2, HIGH);
+     digitalWrite(motor_pin_3, HIGH);
+     digitalWrite(motor_pin_4, LOW);
+   break;
+   case 4:
+     digitalWrite(motor_pin_1, LOW);
+     digitalWrite(motor_pin_2, HIGH);
+     digitalWrite(motor_pin_3, LOW);
+     digitalWrite(motor_pin_4, LOW);
+   break;
+   case 5:
+     digitalWrite(motor_pin_1, HIGH);
+     digitalWrite(motor_pin_2, HIGH);
+     digitalWrite(motor_pin_3, LOW);
+     digitalWrite(motor_pin_4, LOW);
+   break;
+     case 6:
+     digitalWrite(motor_pin_1, HIGH);
+     digitalWrite(motor_pin_2, LOW);
+     digitalWrite(motor_pin_3, LOW);
+     digitalWrite(motor_pin_4, LOW);
+   break;
+   case 7:
+     digitalWrite(motor_pin_1, HIGH);
+     digitalWrite(motor_pin_2, LOW);
+     digitalWrite(motor_pin_3, LOW);
+     digitalWrite(motor_pin_4, HIGH);
+   break;
+   default:
+     digitalWrite(motor_pin_1, LOW);
+     digitalWrite(motor_pin_2, LOW);
+     digitalWrite(motor_pin_3, LOW);
+     digitalWrite(motor_pin_4, LOW);
+   break;
     }
   }
 }
