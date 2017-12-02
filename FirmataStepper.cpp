@@ -383,50 +383,38 @@ void FirmataStepper::updateStepPosition()
  */
 void FirmataStepper::stepMotor(byte step_num, byte direction)
 {
-  // if (this->interface == FirmataStepper::DRIVER)
-  // {
-  //   digitalWrite(dir_pin, direction);
-  //   delayMicroseconds(this->stepDelay);
-  //   digitalWrite(step_pin, LOW);
-  //   delayMicroseconds(this->stepDelay);
-  //   digitalWrite(step_pin, HIGH);
-  // }
-  // else if (this->interface == FirmataStepper::TWO_WIRE)
-  // {
-  //   switch (step_num)
-  //   {
-  //   case 0: /* 01 */
-  //     digitalWrite(motor_pin_1, LOW);
-  //     digitalWrite(motor_pin_2, HIGH);
-  //     break;
-  //   case 1: /* 11 */
-  //     digitalWrite(motor_pin_1, HIGH);
-  //     digitalWrite(motor_pin_2, HIGH);
-  //     break;
-  //   case 2: /* 10 */
-  //     digitalWrite(motor_pin_1, HIGH);
-  //     digitalWrite(motor_pin_2, LOW);
-  //     break;
-  //   case 3: /* 00 */
-  //     digitalWrite(motor_pin_1, LOW);
-  //     digitalWrite(motor_pin_2, LOW);
-  //     break;
-  //   }
-  // }
-  /*else */if (this->interface == FirmataStepper::FOUR_WIRE || true)
+  if (this->interface == FirmataStepper::DRIVER)
   {
-    if ( this->interface == FirmataStepper::FOUR_WIRE ) {
-    } else if ( this->interface == FirmataStepper::DRIVER ) {
+    digitalWrite(dir_pin, direction);
+    delayMicroseconds(this->stepDelay);
+    digitalWrite(step_pin, LOW);
+    delayMicroseconds(this->stepDelay);
+    digitalWrite(step_pin, HIGH);
+  }
+  else if (this->interface == FirmataStepper::TWO_WIRE)
+  {
+    switch (step_num)
+    {
+    case 0: /* 01 */
+      digitalWrite(motor_pin_1, LOW);
+      digitalWrite(motor_pin_2, HIGH);
+      break;
+    case 1: /* 11 */
+      digitalWrite(motor_pin_1, HIGH);
+      digitalWrite(motor_pin_2, HIGH);
+      break;
+    case 2: /* 10 */
+      digitalWrite(motor_pin_1, HIGH);
+      digitalWrite(motor_pin_2, LOW);
+      break;
+    case 3: /* 00 */
+      digitalWrite(motor_pin_1, LOW);
+      digitalWrite(motor_pin_2, LOW);
+      break;
     }
-    int motor_pin_1 = 2;
-    int motor_pin_2 = 3;
-    int motor_pin_3 = 5;
-    int motor_pin_4 = 6;
-    // int motor_pin_1 = 8;
-    // int motor_pin_2 = 9;
-    // int motor_pin_3 = 10;
-    // int motor_pin_4 = 11;
-
+  }
+  else if (this->interface == FirmataStepper::FOUR_WIRE || true)
+  {
     switch (step_num)
     {
     case 0:
